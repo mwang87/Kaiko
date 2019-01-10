@@ -154,13 +154,16 @@ FLAGS = tf.app.flags.FLAGS
 
 
 # ==============================================================================
-# GLOBAL VARIABLES for Cached Model and Knapsack
+# GLOBAL VARIABLES for Cached Model, Knapsack, and TF Session
 # ==============================================================================
 
 MODEL_CACHE = None
 KNAPSACK_CACHE = None
+TFSESSION_CACHE = None
+
 MODEL_CACHED_LOADED = False
 KNAPSACK_CACHE_LOADED = False
+TFSESSION_CACHE_LOADED = False
 
 # ==============================================================================
 # GLOBAL VARIABLES for VOCABULARY

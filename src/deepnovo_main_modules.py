@@ -3034,7 +3034,13 @@ def decode(input_file=deepnovo_config.decode_test_file):
 def multi_decode(input_dir=deepnovo_config.input_mgf_dir, use_cache=False):
   """TODO(nh2tran): docstring."""
 
-  with tf.Session() as sess:
+  #with tf.Session() as sess:
+    if use_cache and deepnovo_config.TFSESSION_CACHE_LOADED:
+        sess = deepnovo_config.TFSESSION_CACHE
+    else:
+        sess = tf.Session()
+        deepnovo_config.TFSESSION_CACHE = sess
+        deepnovo_config.TFSESSION_CACHE_LOADED = True
 
     # DECODING MODEL
     print("DECODING MODEL")
