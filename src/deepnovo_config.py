@@ -159,7 +159,8 @@ FLAGS = tf.app.flags.FLAGS
 
 MODEL_CACHE = None
 KNAPSACK_CACHE = None
-
+MODEL_CACHED_LOADED = False
+KNAPSACK_CACHE_LOADED = False
 
 # ==============================================================================
 # GLOBAL VARIABLES for VOCABULARY

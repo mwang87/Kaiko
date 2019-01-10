@@ -3039,7 +3039,7 @@ def multi_decode(input_dir=deepnovo_config.input_mgf_dir, use_cache=False):
     # DECODING MODEL
     print("DECODING MODEL")
     #~ model = deepnovo_model.DecodingModel()
-    if use_cache and deepnovo_config.MODEL_CACHE != None:
+    if use_cache and deepnovo_config.MODEL_CACHED_LOADED:
         model = deepnovo_config.MODEL_CACHE
     else:
         model = deepnovo_model.ModelInference()
@@ -3047,14 +3047,16 @@ def multi_decode(input_dir=deepnovo_config.input_mgf_dir, use_cache=False):
         model.restore_model(sess)
 
         deepnovo_config.MODEL_CACHE = model
+        deepnovo_config.MODEL_CACHED_LOADED = True
 
     if deepnovo_config.FLAGS.beam_search:
         print("Load knapsack_matrix from deepnovo_config: %s" % (deepnovo_config.knapsack_file))
-        if use_cache and deepnovo_config.KNAPSACK_CACHE != None:
+        if use_cache and deepnovo_config.KNAPSACK_CACHE_LOADED:
             knapsack_matrix = deepnovo_config.KNAPSACK_CACHE
         else:
             knapsack_matrix = np.load(deepnovo_config.knapsack_file)
             deepnovo_config.KNAPSACK_CACHE = knapsack_matrix
+            deepnovo_config.KNAPSACK_CACHE_LOADED = True
 
     ### collect data (mgf) files to test
     print('mgf file path:', input_dir + "/*.mgf")
