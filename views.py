@@ -41,7 +41,7 @@ def heartbeat():
     return "{}"
 
 
-@app.route('/', methods=['GET'])
+@app.route('/kaikodeepnovo', methods=['GET'])
 def default():
     peaks_list = json.loads(request.args['peaks'])
     precursor_mz = float(request.args['precursormz'])
