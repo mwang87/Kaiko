@@ -68,7 +68,7 @@ def default():
 
     output_file_pathname = os.path.join(processing_directory, "query_out.txt")
 
-    deepnovo_main_modules.multi_decode(input_dir=processing_directory)
+    deepnovo_main_modules.multi_decode(input_dir=processing_directory, user_cache=True)
 
     return_list = []
 
