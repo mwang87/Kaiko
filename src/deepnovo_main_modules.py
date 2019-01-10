@@ -3023,7 +3023,15 @@ def decode(input_file=deepnovo_config.decode_test_file):
         print("  accuracy_len %.4f" % (num_len_match))
         print("  spectrum_time %.4f" % (spectrum_time))
 
-def multi_decode(input_dir=deepnovo_config.input_mgf_dir):
+'''
+    Performs inference on a directory of MGF files.
+
+    Parameters:
+    input_dir - folder of inputs
+    use_cache - flag to use the cache found in deepnovo_config so we don't have to reload the model every single time we want to perform inference
+
+'''
+def multi_decode(input_dir=deepnovo_config.input_mgf_dir, use_cache=False):
   """TODO(nh2tran): docstring."""
 
   with tf.Session() as sess:
@@ -3031,27 +3039,22 @@ def multi_decode(input_dir=deepnovo_config.input_mgf_dir):
     # DECODING MODEL
     print("DECODING MODEL")
     #~ model = deepnovo_model.DecodingModel()
-    model = deepnovo_model.ModelInference()
-    model.build_model()
-    model.restore_model(sess)
+    if use_cache and deepnovo_config.MODEL_CACHE != None:
+        model = deepnovo_config.MODEL_CACHE
+    else:
+        model = deepnovo_model.ModelInference()
+        model.build_model()
+        model.restore_model(sess)
 
-#~     test_writer = tf.train.SummaryWriter("test_log", sess.graph)
-#~     test_writer.close()
-
-    # LOAD PARAMETERS
-    #~ print("LOAD PARAMETERS")
-    #~ saver = tf.train.Saver(tf.global_variables())
-    #~ ckpt = tf.train.get_checkpoint_state(deepnovo_config.FLAGS.train_dir)
-    #~ if ckpt and tf.gfile.Exists(ckpt.model_checkpoint_path+".index"):
-      #~ print("Reading model parameters from %s" % ckpt.model_checkpoint_path)
-      #~ saver.restore(sess, ckpt.model_checkpoint_path)
-    #~ else:
-      #~ print("ERROR: model parameters not found.")
-      #~ sys.exit()
+        deepnovo_config.MODEL_CACHE = model
 
     if deepnovo_config.FLAGS.beam_search:
-      print("Load knapsack_matrix from default: knapsack.npy")
-      knapsack_matrix = np.load(deepnovo_config.knapsack_file)
+        print("Load knapsack_matrix from deepnovo_config: %s" % (deepnovo_config.knapsack_file))
+        if use_cache and deepnovo_config.KNAPSACK_CACHE != None:
+            knapsack_matrix = deepnovo_config.KNAPSACK_CACHE
+        else:
+            knapsack_matrix = np.load(deepnovo_config.knapsack_file)
+            deepnovo_config.KNAPSACK_CACHE = knapsack_matrix
 
     ### collect data (mgf) files to test
     print('mgf file path:', input_dir + "/*.mgf")
