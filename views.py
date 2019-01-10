@@ -36,6 +36,10 @@ def write_single_mgf(mz, peaks, charge, output_filename):
 
         output_mgf.write("END IONS\n")
 
+@app.route('/heartbeat', methods=['GET'])
+def heartbeat():
+    return "{}"
+
 
 @app.route('/', methods=['GET'])
 def default():
