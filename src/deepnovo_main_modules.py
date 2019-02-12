@@ -141,17 +141,17 @@ def read_spectra(file_handle, data_format, spectra_locations):
       line = file_handle.readline()
       charge = float(re.split('=|\+', line)[1]) # pylint: disable=anomalous-backslash-in-string,line-too-long
 
-      # header SCANS
-      line = file_handle.readline()
-      #~ scan = int(re.split('=', line)[1])
-      scan = re.split('=|\n', line)[1]
-
       # header RTINSECONDS
       line = file_handle.readline()
 
       # header SEQ
       line = file_handle.readline()
       raw_sequence = re.split('=|\n|\r', line)[1]
+
+      # header SCANS
+      line = file_handle.readline()
+      #~ scan = int(re.split('=', line)[1])
+      scan = re.split('=|\n', line)[1]
 
       ###########################
       ## for unknown sequences ##
@@ -252,6 +252,7 @@ def read_spectra(file_handle, data_format, spectra_locations):
       while not "END IONS" in line:
         # parse pairs of "mz intensity"
         mz, intensity = re.split(' |\n', line)[:2]
+
         intensity_float = float(intensity)
         mz_float = float(mz)
         if mz_float > deepnovo_config.MZ_MAX: # skip this peak

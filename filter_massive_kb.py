@@ -8,11 +8,15 @@ output_mgf_filename = sys.argv[2]
 spectrum_lines = []
 keep_spectrum = True
 
-blacklist = ["PROTEIN=", "SCANS=", "SCAN=", "SCORE=", "FDR=", "COLLISION_ENERGY=", "FILENAME=", "MSLEVEL="]
+blacklist = ["PROTEIN=", "SCANS=", "SCAN=", "FDR=", "COLLISION_ENERGY=", "FILENAME=", "MSLEVEL="]
 
 with open(output_mgf_filename, "w") as output_file:
     for line in open(input_mgf_filename):
         if any(s in line for s in blacklist):
+            continue
+
+        if "SCORE=" in line:
+            spectrum_lines.append(line.rstrip().replace("\t", " ").replace("SCORE", "SCANS"))
             continue
 
         if "BEGIN IONS" in line:
@@ -25,7 +29,7 @@ with open(output_mgf_filename, "w") as output_file:
         spectrum_lines.append(line.rstrip().replace("\t", " "))
 
         if "CHARGE=" in line:
-            spectrum_lines.append("SCANS=XXX")
+            #spectrum_lines.append("SCANS=XXX")
             spectrum_lines.append("RTINSECONDS=100")
 
         if "END IONS" in line:
